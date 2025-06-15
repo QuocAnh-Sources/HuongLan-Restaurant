@@ -20,55 +20,41 @@ function Menu() {
       setCategories(catList);
       setFoods(foodList);
     };
-
     fetchData();
   }, []);
 
-  // return (
-  //   <div className="p-6">
-  //     <h1 className="mb-4 text-2xl font-bold">Thực đơn</h1>
-  //     {categories.map(cat => (
-  //       <div key={cat.id} className="mb-6">
-  //         <h2 className="text-xl font-semibold text-red-600">{cat.name || cat.Name}</h2>
-  //         <div className="grid justify-end grid-cols-2 gap-4 mt-2 md:grid-cols-3">
-  //           {foods
-  //             .filter(food => food.categoryId === cat.id)
-  //             .map(food => (
-  //               <div key={food.id} className="p-2 border rounded-lg shadow hover:shadow-md">
-  //                 <img src={food.imageURL} alt={food.name} className="object-cover w-full h-32 rounded" />
-  //                 <h3 className="mt-2 font-medium text-md">{food.Name}</h3>
-  //                 <p className="text-sm text-gray-500">{food.Price}</p>
-  //               </div>
-  //             ))}
-  //         </div>
-  //       </div>
-  //     ))}
-  //   </div>
-  // );
-
   return (
   <div className="p-6">
-    <h1 className="mb-6 text-2xl font-bold">Thực đơn</h1>
-
+    <h1 className="mb-6 text-2xl font-bold">MENU</h1>
     {categories.map(cat => (
-      <div key={cat.id} className="grid grid-cols-4 gap-4 mb-8" id={cat.id}>
+      <div key={cat.id} className="grid grid-cols-5 gap-4 mb-8" id={cat.id}>
         {/* 🟥 Cột 1: Tiêu đề danh mục */}
         <div className="col-span-1">
-          <h2 className="text-xl font-semibold text-red-600">{cat.name || cat.id}</h2>
+          <div className="w-full overflow-auto aspect-auto">
+            <h2 className="object-cover text-xl font-semibold text-red-600">{cat.name || cat.Name}</h2>
+          </div>          
         </div>
 
         {/* 🟩 Cột 2-4: Các món ăn thuộc category đó */}
-        <div className="grid grid-cols-3 col-span-3 gap-4">
+        <div className="grid grid-cols-1 col-span-4 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {foods
             .filter(food => food.categoryId === cat.id)
+            .sort((a, b) => a.order - b.order)
             //.slice(0, 3) // Giới hạn chỉ hiển thị 3 món
             .map(food => (
-              <div key={food.id} className="p-2 border rounded-lg shadow hover:shadow-md">
-                <img
-                  src={food.imageURL?.replace(/^"|"$/g, "")}
-                  alt={food.name}
-                  className="object-cover w-full h-32 rounded"
-                />
+              <div 
+                key={food.id} 
+                className="p-2 rounded-lg shadow hover:shadow-md"
+              >
+                {/* Container ảnh giữ tỉ lệ 4:3 */}
+                <div className="aspect-[2/1] w-full overflow-hidden rounded">
+                  <img
+                    src={food.imageURL?.replace(/^"|"$/g, "")}
+                    alt={food.name}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+                {/* Phần text nằm riêng, không bị ảnh hưởng bởi aspect-ratio */}
                 <h3 className="mt-2 font-medium text-md">{food.Name}</h3>
                 <p className="text-sm text-gray-500">{food.Price}</p>
               </div>
